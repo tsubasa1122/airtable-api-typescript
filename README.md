@@ -11,3 +11,8 @@ $ gh repo clone tsubasa1122/airtable-api-typescript
 $ cd airtable-api-typescript
 $ yarn
 ```
+
+### memo
+
+- Airtable 側が Client を用意してくれているみたいだが、今回は愚直に実装する
+  - https://github.com/Airtable/airtable.js
