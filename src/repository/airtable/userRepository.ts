@@ -13,12 +13,24 @@ type UserResponse = {
     age: number;
   };
 };
+
+type UsersRequestData = {
+  records: UserRequestData[];
+};
+
+type UserRequestData = {
+  fields: {
+    name: string;
+    age: number;
+  };
+};
 export class UserRepository {
   constructor(private readonly httpClient: HttpClient) {}
 
-  insert = async (data: any) => {
+  insert = async (users: User[]): Promise<void> => {
+    const convertedUsers = this.convertUsersToAirtableRequestFormatData(users);
     // pathを切り出したい
-    await this.httpClient.post(`/Table%201`, data);
+    await this.httpClient.post<UsersRequestData>(`/Table%201`, convertedUsers);
   };
 
   getAll = async (): Promise<User[] | []> => {
@@ -30,5 +42,19 @@ export class UserRepository {
     return data.records.map((record) =>
       User.build(record.fields.name, record.fields.age, record.id)
     );
+  };
+
+  private convertUsersToAirtableRequestFormatData = (
+    users: User[]
+  ): UsersRequestData => {
+    const formattedUsers = users.map((user) => {
+      return {
+        fields: {
+          name: user.name,
+          age: user.age,
+        },
+      };
+    });
+    return { records: formattedUsers };
   };
 }

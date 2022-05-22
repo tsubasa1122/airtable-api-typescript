@@ -7,9 +7,9 @@
 
 export default class User {
   private constructor(
-    private name: string,
-    private age: number,
-    private id?: string
+    readonly name: string,
+    readonly age: number,
+    readonly id?: string
   ) {}
 
   /**
