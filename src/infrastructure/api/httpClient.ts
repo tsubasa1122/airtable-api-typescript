@@ -1,23 +1,23 @@
 import axios from "axios";
 import { IHttpClient } from "./IHttpClient";
 
-// 今回はAirtableAPIのみ利用するため、ここでURLも定義する
-const BASE_URL = "https://api.airtable.com/v0/";
-const TABLE_ID = process.env.AIRTABLE_TABLE_ID;
-const API_KEY = process.env.AIRTABLE_API_KEY;
-
-const AIRTABLE_API_URL = `${BASE_URL}${TABLE_ID}`;
-
-const defaultHeaderOptions = {
-  Authorization: `Bearer ${API_KEY}`,
-};
-
 export class HttpClient implements IHttpClient {
+  TABLE_ID = process.env.AIRTABLE_TABLE_ID;
+  API_KEY = process.env.AIRTABLE_API_KEY;
+  // 今回はAirtableAPIのみ利用するため、ここでURLも定義する
+  BASE_URL = "https://api.airtable.com/v0/";
+
+  AIRTABLE_API_URL = `${this.BASE_URL}${this.TABLE_ID}`;
+
+  defaultHeaderOptions = {
+    Authorization: `Bearer ${this.API_KEY}`,
+    ContentType: "application/json",
+  };
   // インスタンスが生成されるタイミングでaxiosのデフォルト値も設定したい
   // このやり方であっているか分からない
   private readonly axios = axios.create({
-    baseURL: AIRTABLE_API_URL,
-    headers: defaultHeaderOptions,
+    baseURL: this.AIRTABLE_API_URL,
+    headers: this.defaultHeaderOptions,
   });
 
   get = async <T>(path: string): Promise<T> => {
